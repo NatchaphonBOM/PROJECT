@@ -158,12 +158,12 @@
     
     function publishMQTT(topic, data) {
       if (mqttClient && mqttClient.connected) {
-        const message = JSON.stringify(data);
-        mqttClient.publish(topic, message, function(error) {
+        const message = typeof data === 'string' ? data : JSON.stringify(data);
+        mqttClient.publish(topic, message, { qos: 0, retain: false }, function(error) {
           if (error) {
             console.error('MQTT Publish Error:', error);
           } else {
-            console.log('MQTT Message Published:', topic, data);
+            console.log('MQTT Message Published:', topic, message);
           }
         });
       }
@@ -254,11 +254,7 @@
         
         // ส่งผลลัพธ์ไป MQTT (ส่งทุก 500ms เพื่อไม่ให้ส่งบ่อยเกินไป)
         if (!window.lastMqttSend || Date.now() - window.lastMqttSend > 500) {
-          publishMQTT(MQTT_TOPIC_PREDICTIONS, {
-            predictions: predictions,
-            topPrediction: topPrediction,
-            timestamp: new Date().toISOString()
-          });
+          publishMQTT(MQTT_TOPIC_PREDICTIONS, topPrediction.className);
           window.lastMqttSend = Date.now();
         }
         
@@ -293,16 +289,5 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
 
 
