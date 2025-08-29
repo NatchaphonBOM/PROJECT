@@ -6,7 +6,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
   <!-- HiveMQ WebSocket MQTT Client -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.1/mqtt.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -96,7 +96,6 @@
       console.log("Connecting to MQTT broker:", brokerUrl);
       
       try {
-        const brokerUrl = `wss://broker.emqx.io:8084/mqtt`;
         mqttClient = mqtt.connect(brokerUrl, {
           clientId: mqttConfig.clientId,
           username: mqttConfig.username,
@@ -294,6 +293,7 @@
   </script>
 </body>
 </html>
+
 
 
 
