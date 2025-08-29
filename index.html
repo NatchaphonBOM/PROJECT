@@ -92,7 +92,7 @@
       statusEl.className = 'connecting';
       statusEl.innerText = 'MQTT: Connecting...';
       
-      const brokerUrl = `wss://${mqttConfig.host}:${mqttConfig.port}/mqtt`;
+      const brokerUrl = `wss://${mqttConfig.host}:${mqttConfig.port}`;
       
       try {
         mqttClient = mqtt.connect(brokerUrl, {
@@ -291,6 +291,7 @@
   </script>
 </body>
 </html>
+
 
 
 
