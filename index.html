@@ -237,7 +237,7 @@
         for (let i = 0; i < maxPredictions; i++) {
           const className = prediction[i].className;
           const probability = prediction[i].probability.toFixed(2);
-          const classPrediction = className + ": " + probability;
+          labelContainer.childNodes[i].innerHTML = `${className}: ${probability}`;
           
           labelContainer.childNodes[i].innerHTML = classPrediction;
           
@@ -252,11 +252,16 @@
           (prev.probability > current.probability) ? prev : current
         );
         
-        // ส่งผลลัพธ์ไป MQTT (ส่งทุก 500ms เพื่อไม่ให้ส่งบ่อยเกินไป)
-        if (topPrediction.probability >= 0.6 &&
-          (!window.lastMqttSend || Date.now() - window.lastMqttSend > 2000) {
+        // 
+        const now = Date.now();
+        const confidentEnough = topPrediction.probability >= 0.6;
+        const timeElapsed = now - window.lastMqttSend > 2000;
+        const isNewPrediction = topPrediction.className !== window.lastSentClass;
+
+        if (confidentEnough && timeElapsed && isNewPrediction) {
           publishMQTT(MQTT_TOPIC_PREDICTIONS, topPrediction.className);
-          window.lastMqttSend = Date.now();
+          window.lastMqttSend = now;
+          window.lastSentClass = topPrediction.className;
         }
         
       } catch (error) {
@@ -290,6 +295,7 @@
   </script>
 </body>
 </html>
+
 
 
 
