@@ -79,7 +79,7 @@
       protocol: 'wss',
       username: '', // เว้นว่างสำหรับ HiveMQ public broker
       password: '', // เว้นว่างสำหรับ HiveMQ public broker
-      clientId: 'clientId-qlJphgTkeX' + Math.random().toString(16).substr(2, 8)
+      clientId: 'clientId-Uzi9wKz8KP' + Math.random().toString(16).substr(2, 8)
     };
     
     // MQTT Topics
@@ -254,7 +254,7 @@
         
         // ส่งผลลัพธ์ไป MQTT (ส่งทุก 500ms เพื่อไม่ให้ส่งบ่อยเกินไป)
         if (topPrediction.probability >= 0.6 &&
-          (!window.lastMqttSend || Date.now() - window.lastMqttSend > 2000) {
+            (!window.lastMqttSend || Date.now() - window.lastMqttSend > 2000) {
           publishMQTT(MQTT_TOPIC_PREDICTIONS, topPrediction.className);
           window.lastMqttSend = Date.now();
         }
@@ -290,5 +290,6 @@
   </script>
 </body>
 </html>
+
 
 
