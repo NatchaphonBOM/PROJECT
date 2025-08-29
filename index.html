@@ -113,7 +113,6 @@
           
           // ส่งสถานะการเชื่อมต่อ
           publishMQTT(MQTT_TOPIC_STATUS, {
-            console.log('MQTT Connected to HiveMQ');
             status: 'connected',
             clientId: mqttConfig.clientId,
             timestamp: new Date().toISOString()
@@ -294,6 +293,7 @@
   </script>
 </body>
 </html>
+
 
 
 
