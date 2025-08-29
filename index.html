@@ -92,7 +92,7 @@
       statusEl.className = 'connecting';
       statusEl.innerText = 'MQTT: Connecting...';
       
-      const brokerUrl = `wss://${mqttConfig.host}:${mqttConfig.port}`;
+      const brokerUrl = "wss://broker.hivemq.com:8884/mqtt";
       console.log("Connecting to MQTT broker:", brokerUrl);
       
       try {
@@ -293,6 +293,7 @@
   </script>
 </body>
 </html>
+
 
 
 
