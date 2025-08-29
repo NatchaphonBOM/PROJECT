@@ -93,6 +93,7 @@
       statusEl.innerText = 'MQTT: Connecting...';
       
       const brokerUrl = `wss://${mqttConfig.host}:${mqttConfig.port}`;
+      console.log("Connecting to MQTT broker:", brokerUrl);
       
       try {
         mqttClient = mqtt.connect(brokerUrl, {
@@ -101,7 +102,8 @@
           password: mqttConfig.password,
           keepalive: 60,
           connectTimeout: 4000,
-          reconnectPeriod: 1000
+          reconnectPeriod: 1000,
+          rejectUnauthorized: false // เพิ่มการตั้งค่านี้เพื่อป้องกัน SSL Error
         });
         
         mqttClient.on('connect', function() {
@@ -111,6 +113,7 @@
           
           // ส่งสถานะการเชื่อมต่อ
           publishMQTT(MQTT_TOPIC_STATUS, {
+            console.log('MQTT Connected to HiveMQ');
             status: 'connected',
             clientId: mqttConfig.clientId,
             timestamp: new Date().toISOString()
@@ -120,7 +123,7 @@
         mqttClient.on('error', function(error) {
           console.error('MQTT Connection Error:', error);
           statusEl.className = 'disconnected';
-          statusEl.innerText = 'MQTT: Connection Error';
+          statusEl.innerText = `MQTT: Connection Error - ${error.message}`;
         });
         
         mqttClient.on('offline', function() {
@@ -291,6 +294,7 @@
   </script>
 </body>
 </html>
+
 
 
 
