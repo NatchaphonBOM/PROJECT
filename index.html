@@ -103,7 +103,7 @@
           keepalive: 60,
           connectTimeout: 15000,
           reconnectPeriod: 1000,
-          rejectUnauthorized: false // เพิ่มการตั้งค่านี้เพื่อป้องกัน SSL Error
+          
         });
         
         mqttClient.on('connect', function() {
@@ -293,6 +293,7 @@
   </script>
 </body>
 </html>
+
 
 
 
