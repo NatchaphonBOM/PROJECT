@@ -253,7 +253,8 @@
         );
         
         // ส่งผลลัพธ์ไป MQTT (ส่งทุก 500ms เพื่อไม่ให้ส่งบ่อยเกินไป)
-        if (!window.lastMqttSend || Date.now() - window.lastMqttSend > 500) {
+        if (topPrediction.probability >= 0.6 &&
+          (!window.lastMqttSend || Date.now() - window.lastMqttSend > 2000) {
           publishMQTT(MQTT_TOPIC_PREDICTIONS, topPrediction.className);
           window.lastMqttSend = Date.now();
         }
@@ -289,6 +290,7 @@
   </script>
 </body>
 </html>
+
 
 
 
