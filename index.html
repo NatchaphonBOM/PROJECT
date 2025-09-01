@@ -253,14 +253,39 @@
         );
         
         // ส่งผลลัพธ์ไป MQTT (ส่งทุก 500ms เพื่อไม่ให้ส่งบ่อยเกินไป)
-        window.lastSentClass = null;
-        if (
-          topPrediction.probability >= 0.9 &&
-          (!window.lastMqttSend || Date.now() - window.lastMqttSend > 2000)
-        ) {
-          publishMQTT(MQTT_TOPIC_PREDICTIONS, topPrediction.className);
-          window.lastMqttSend = Date.now();
+        // หาผลลัพธ์ที่มีความน่าจะเป็นสูงสุด
+        const topPrediction = predictions.reduce((prev, current) => 
+          (prev.probability > current.probability) ? prev : current
+        );
+        
+        // ตั้งค่าเกณฑ์เสถียร
+        const STABLE_THRESHOLD = 0.95;      // ค่าความน่าจะเป็นขั้นต่ำ
+        const STABLE_DURATION = 2000;       // หน่วยเป็นมิลลิวินาที (2 วินาที)
+        
+        // ตรวจสอบว่าเป็น class เดิม และมีค่า >= 0.95 ต่อเนื่องหรือไม่
+        if (topPrediction.probability >= STABLE_THRESHOLD) {
+          if (window.lastStableClass !== topPrediction.className) {
+            // ถ้าเปลี่ยน class ใหม่ เริ่มนับใหม่
+            window.lastStableClass = topPrediction.className;
+            window.stableStartTime = Date.now();
+          } else {
+            // ถ้า class เดิม และเวลาคงที่ > STABLE_DURATION
+            const duration = Date.now() - window.stableStartTime;
+            if (
+              duration >= STABLE_DURATION &&
+              (!window.lastMqttSend || Date.now() - window.lastMqttSend > STABLE_DURATION)
+            ) {
+              publishMQTT(MQTT_TOPIC_PREDICTIONS, topPrediction.className);
+              window.lastMqttSend = Date.now();
+              console.log(`✅ Sent stable class: ${topPrediction.className} (held for ${duration}ms)`);
+            }
+          }
+        } else {
+          // ค่าไม่ถึงเกณฑ์ -> รีเซ็ต
+          window.lastStableClass = null;
+          window.stableStartTime = null;
         }
+
         
       } catch (error) {
         console.error('Prediction error:', error);
@@ -293,6 +318,7 @@
   </script>
 </body>
 </html>
+
 
 
 
