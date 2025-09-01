@@ -251,16 +251,7 @@
         const topPrediction = predictions.reduce((prev, current) => 
           (prev.probability > current.probability) ? prev : current
         );
-        
-        // ส่งผลลัพธ์ไป MQTT (ส่งทุก 500ms เพื่อไม่ให้ส่งบ่อยเกินไป)
-        // หาผลลัพธ์ที่มีความน่าจะเป็นสูงสุด
-        const topPrediction = predictions.reduce((prev, current) => 
-          (prev.probability > current.probability) ? prev : current
-        );
-        const topPrediction = predictions.reduce((prev, current) => 
-          (prev.probability > current.probability) ? prev : current
-        );
-
+       
         // ตั้งค่าเกณฑ์เสถียร
         const STABLE_THRESHOLD = 0.95;      // ค่าความน่าจะเป็นขั้นต่ำ
         const STABLE_DURATION = 2000;       // หน่วยเป็นมิลลิวินาที (2 วินาที)
@@ -321,6 +312,7 @@
   </script>
 </body>
 </html>
+
 
 
 
